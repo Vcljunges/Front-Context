@@ -12,6 +12,7 @@ type UserContextType = {
     posts: Post[];
     addPost: (title: string, body: string, id: number, author: string) => void;
     removePost: (id: number) => void;
+    updatePost: (id: number, title: string, body: string) => void;
 }
 
 export const UserProfileContext = createContext<UserContextType | null>(null);
@@ -29,8 +30,12 @@ export const UserProfileProvider = ({ children }: Props) => {
         setPosts(posts.filter(post => post.id !== id));
     };
 
+    const updatePost = (id: number, title: string, body: string) => {
+        setPosts(posts.map(post => post.id === id ? { ...post, title, body } : post));
+    };
+
     return (
-        <UserProfileContext.Provider value={{ posts, addPost, removePost }}>
+        <UserProfileContext.Provider value={{ posts, addPost, removePost, updatePost }}>
             {children}
         </UserProfileContext.Provider>
     );
